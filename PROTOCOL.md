@@ -9,8 +9,11 @@ on Ukrainian questions than on the same questions in English, and what does each
 memory on a laptop?
 
 ## Items
-Global-MMLU (revision 0e619db), parallel `en`/`uk` test questions: 300 per subject category (4 categories, 1200
-pairs), seed 2026; repeated questions kept once. The Ukrainian questions are translations of the English originals.
+Global-MMLU (revision 0e619db), parallel `en`/`uk` test questions: 300 per subject category, seed 2026; repeated
+questions kept once. The Ukrainian questions are translations of the English originals.
+
+Correction made during the first test run, before any result was analysed: the plan first said "4 categories, 1200
+pairs"; Global-MMLU has 6 subject categories, so the sample has 1800 pairs.
 
 ## Models and formats
 Ollama builds of the same checkpoints: Qwen2.5 3B Instruct and Llama 3.2 3B Instruct at F16, Q8_0, Q6_K, Q5_K_M,
