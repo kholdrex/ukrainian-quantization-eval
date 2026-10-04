@@ -75,7 +75,16 @@ def bench(tag: str, items: list[Item], path: Path) -> None:
         for lang in LANGS:
             r = ollama.stream(tag, prompts.messages(item, lang, "explain"), BENCH_TOKENS)
             if "error" in r:
-                rows.append({"kind": "aborted", "id": item.id, "lang": lang, "error": r["error"], "wall": r["wall"]})
+                rows.append(
+                    {
+                        "kind": "aborted",
+                        "id": item.id,
+                        "lang": lang,
+                        "error": r["error"],
+                        "wall": r["wall"],
+                        "attempts": r["attempts"],
+                    }
+                )
                 continue
             rows.append(
                 {
@@ -88,9 +97,33 @@ def bench(tag: str, items: list[Item], path: Path) -> None:
                     "prompt_seconds": r["prompt_eval_duration"] / 1e9,
                     "eval_tokens": r["eval_count"],
                     "eval_seconds": r["eval_duration"] / 1e9,
+                    "attempts": r["attempts"],
                 }
             )
     path.write_text("".join(json.dumps(r) + "\n" for r in rows))
+
+
+def identity(tag: str) -> dict:
+    info = ollama.installed()[tag]
+    return {
+        "tag": tag,
+        "digest": info["digest"],
+        "size": info["size"],
+        "details": info["details"],
+        "ollama": ollama.version(),
+    }
+
+
+def check_identity(path: Path, tag: str) -> None:
+    """Record the model file on first use; refuse to continue a run with a different file or runtime version."""
+    current = identity(tag)
+    if path.exists():
+        stored = json.loads(path.read_text())
+        if (stored["digest"], stored["ollama"]) != (current["digest"], current["ollama"]):
+            raise RuntimeError(f"{tag}: model file or Ollama version differs from the recorded run")
+        return
+    path.parent.mkdir(exist_ok=True)
+    path.write_text(json.dumps(current, indent=1) + "\n")
 
 
 def run(configs: list[Config], items: list[Item], bench_items: list[Item], results: Path, keep: set[str]) -> None:
@@ -101,22 +134,7 @@ def run(configs: list[Config], items: list[Item], bench_items: list[Item], resul
             name = f"{config.family}-{fmt}"
             if tag not in ollama.installed():
                 ollama.pull(tag)
-            meta = results / "models" / f"{name}.json"
-            meta.parent.mkdir(exist_ok=True)
-            info = ollama.installed()[tag]
-            meta.write_text(
-                json.dumps(
-                    {
-                        "tag": tag,
-                        "digest": info["digest"],
-                        "size": info["size"],
-                        "details": info["details"],
-                        "ollama": ollama.version(),
-                    },
-                    indent=1,
-                )
-                + "\n"
-            )
+            check_identity(results / "models" / f"{name}.json", tag)
             answer_all(tag, items, results / "answers" / f"{name}.jsonl")
             bench(tag, bench_items, results / "bench" / f"{name}.jsonl")
             ollama.unload(tag)
@@ -125,13 +143,17 @@ def run(configs: list[Config], items: list[Item], bench_items: list[Item], resul
 
 
 def rebench(configs: list[Config], bench_items: list[Item], results: Path, keep: set[str]) -> None:
-    """Measure speed and memory again, e.g. when another job was competing for the machine during the first run."""
+    """Measure speed and memory again, e.g. when another job competed for the machine during the first run; the
+    earlier measurement is kept next to the new one with the suffix `.superseded`."""
     for config in configs:
         for fmt, tag in config.tags():
-            path = results / "bench" / f"{config.family}-{fmt}.jsonl"
-            path.unlink(missing_ok=True)
+            name = f"{config.family}-{fmt}"
             if tag not in ollama.installed():
                 ollama.pull(tag)
+            check_identity(results / "models" / f"{name}.json", tag)
+            path = results / "bench" / f"{name}.jsonl"
+            if path.exists():
+                path.rename(path.with_suffix(".superseded"))
             bench(tag, bench_items, path)
             ollama.unload(tag)
             if tag not in keep:

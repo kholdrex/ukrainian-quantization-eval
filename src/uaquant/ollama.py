@@ -29,7 +29,7 @@ def stream(model: str, messages: list[dict], tokens: int, attempts: int = 3) -> 
     off is repeated."""
     for attempt in range(attempts):
         try:
-            return stream_once(model, messages, tokens)
+            return {**stream_once(model, messages, tokens), "attempts": attempt + 1}
         except (RuntimeError, requests.RequestException):
             if attempt == attempts - 1:
                 raise

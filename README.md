@@ -22,7 +22,8 @@ pinned revision on first use.
 src/uaquant/    data loading, prompts, Ollama client, runner (answers and speed test), analysis and figure
 data/           sample.json
 results/        answers/<model>-<level>.jsonl (first-token letter log-probabilities and prompt tokens per question
-                and language), bench/<model>-<level>.jsonl (load, memory and per-prompt timings), models/ (Ollama tag,
+                and language), bench/<model>-<level>.jsonl (load, memory and per-prompt timings; `.superseded` is a measurement
+                replaced by `uaquant rebench`), models/ (Ollama tag,
                 digest and size of every file), pilot/, summary.json
 figures/        figure of the paper
 tests/          unit tests
