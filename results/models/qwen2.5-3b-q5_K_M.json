@@ -1,0 +1,18 @@
+{
+ "tag": "qwen2.5:3b-instruct-q5_K_M",
+ "digest": "19cf317bd4792942b759199b10725e223664a3bee93d223e44e085fabb278878",
+ "size": 2224824432,
+ "details": {
+  "parent_model": "",
+  "format": "gguf",
+  "family": "qwen2",
+  "families": [
+   "qwen2"
+  ],
+  "parameter_size": "3.1B",
+  "quantization_level": "Q5_K_M",
+  "context_length": 32768,
+  "embedding_length": 2048
+ },
+ "ollama": "0.34.3"
+}

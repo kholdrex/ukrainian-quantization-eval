@@ -24,8 +24,19 @@ def answer(model: str, messages: list[dict], top: int = 20) -> dict:
     return response.json()
 
 
-def stream(model: str, messages: list[dict], tokens: int) -> dict:
-    """Generate a fixed number of tokens, recording the wall-clock time to the first token."""
+def stream(model: str, messages: list[dict], tokens: int, attempts: int = 3) -> dict:
+    """Generate a fixed number of tokens, recording the wall-clock time to the first token; a stream that breaks
+    off is repeated."""
+    for attempt in range(attempts):
+        try:
+            return stream_once(model, messages, tokens)
+        except (RuntimeError, requests.RequestException):
+            if attempt == attempts - 1:
+                raise
+            time.sleep(5)
+
+
+def stream_once(model: str, messages: list[dict], tokens: int) -> dict:
     body = {"model": model, "messages": messages, "stream": True, "options": {**OPTIONS, "num_predict": tokens}}
     start = time.perf_counter()
     first = None
@@ -33,6 +44,8 @@ def stream(model: str, messages: list[dict], tokens: int) -> dict:
         response.raise_for_status()
         for line in response.iter_lines():
             chunk = json.loads(line)
+            if "error" in chunk:
+                return {"error": chunk["error"], "ttft": first, "wall": time.perf_counter() - start}
             if first is None and chunk.get("message", {}).get("content"):
                 first = time.perf_counter() - start
             if chunk.get("done"):

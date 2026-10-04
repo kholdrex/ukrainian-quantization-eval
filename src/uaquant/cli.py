@@ -38,6 +38,15 @@ def cmd_run(args):
     experiment.run(configs, items, pilot(), results, set(args.keep))
 
 
+def cmd_rebench(args):
+    configs = [
+        experiment.Config(c.family, c.label, c.prefix, tuple(f for f in c.formats if f in args.formats))
+        for c in experiment.CONFIGS
+        if c.family in args.families
+    ]
+    experiment.rebench(configs, pilot(), RESULTS, set(args.keep))
+
+
 def cmd_analyze(_):
     from . import analysis
 
@@ -53,6 +62,11 @@ def main():
     run.add_argument("--formats", nargs="+")
     run.add_argument("--keep", nargs="*", default=[], help="Ollama tags not to delete after the run")
     run.set_defaults(func=cmd_run)
+    rebench = sub.add_parser("rebench")
+    rebench.add_argument("--families", nargs="+", required=True)
+    rebench.add_argument("--formats", nargs="+", required=True)
+    rebench.add_argument("--keep", nargs="*", default=[])
+    rebench.set_defaults(func=cmd_rebench)
     sub.add_parser("analyze").set_defaults(func=cmd_analyze)
     args = parser.parse_args()
     args.func(args)

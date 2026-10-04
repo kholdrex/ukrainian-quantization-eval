@@ -1,0 +1,18 @@
+{
+ "tag": "qwen2.5:3b-instruct-fp16",
+ "digest": "de47f806df145a7f39177339d025dfada5e87c294a76f0d46392ce48cd5168a1",
+ "size": 6178326637,
+ "details": {
+  "parent_model": "/Users/ollama/.ollama/models/blobs/sha256-bfa0216b48c79e4518d5c69ee572eaf8b517892a19048b9e7388fb1442165cdb",
+  "format": "gguf",
+  "family": "qwen2",
+  "families": [
+   "qwen2"
+  ],
+  "parameter_size": "3.1B",
+  "quantization_level": "F16",
+  "context_length": 32768,
+  "embedding_length": 2048
+ },
+ "ollama": "0.34.3"
+}

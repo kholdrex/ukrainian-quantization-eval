@@ -1,0 +1,18 @@
+{
+ "tag": "gemma3:4b-it-fp16",
+ "digest": "c4da438ae7560d98f95b31af54300e5ebbad21e9de2802f6d44ed6c62657de0c",
+ "size": 8617194121,
+ "details": {
+  "parent_model": "",
+  "format": "gguf",
+  "family": "gemma3",
+  "families": [
+   "gemma3"
+  ],
+  "parameter_size": "4.3B",
+  "quantization_level": "F16",
+  "context_length": 131072,
+  "embedding_length": 2560
+ },
+ "ollama": "0.34.3"
+}

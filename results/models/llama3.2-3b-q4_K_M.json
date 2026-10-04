@@ -1,0 +1,18 @@
+{
+ "tag": "llama3.2:3b-instruct-q4_K_M",
+ "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+ "size": 2019393189,
+ "details": {
+  "parent_model": "",
+  "format": "gguf",
+  "family": "llama",
+  "families": [
+   "llama"
+  ],
+  "parameter_size": "3.2B",
+  "quantization_level": "Q4_K_M",
+  "context_length": 131072,
+  "embedding_length": 3072
+ },
+ "ollama": "0.34.3"
+}

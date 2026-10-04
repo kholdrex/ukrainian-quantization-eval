@@ -41,3 +41,13 @@ wrong.
 ## Not claimed
 Results hold for these checkpoints, this runtime and this machine; no claim about other quantisation methods
 (GPTQ, AWQ), larger models or free-form generation quality.
+
+## Changes during the runs
+
+- A generation that Ollama stops because of endless token repetition ("token repeat limit reached") ends the stream
+  with an error instead of a final chunk; such generations are recorded as aborted in the speed test and excluded
+  from the speed medians (this happened only for Qwen2.5 Q3_K_M with Ukrainian prompts).
+- The speed of Qwen2.5 Q5_K_M was measured again on an idle machine (`uaquant rebench`), because another
+  CPU-intensive job ran during the first measurement; the accuracy runs are not affected.
+- Exploratory, added after the main results: the share of changed answers grouped by the F16 probability of the
+  chosen letter (below 0.9, 0.9–0.99, at least 0.99).

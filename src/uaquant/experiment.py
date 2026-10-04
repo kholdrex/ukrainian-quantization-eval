@@ -74,6 +74,9 @@ def bench(tag: str, items: list[Item], path: Path) -> None:
     for item in items[:BENCH_ITEMS]:
         for lang in LANGS:
             r = ollama.stream(tag, prompts.messages(item, lang, "explain"), BENCH_TOKENS)
+            if "error" in r:
+                rows.append({"kind": "aborted", "id": item.id, "lang": lang, "error": r["error"], "wall": r["wall"]})
+                continue
             rows.append(
                 {
                     "kind": "warm",
@@ -116,6 +119,20 @@ def run(configs: list[Config], items: list[Item], bench_items: list[Item], resul
             )
             answer_all(tag, items, results / "answers" / f"{name}.jsonl")
             bench(tag, bench_items, results / "bench" / f"{name}.jsonl")
+            ollama.unload(tag)
+            if tag not in keep:
+                ollama.remove(tag)
+
+
+def rebench(configs: list[Config], bench_items: list[Item], results: Path, keep: set[str]) -> None:
+    """Measure speed and memory again, e.g. when another job was competing for the machine during the first run."""
+    for config in configs:
+        for fmt, tag in config.tags():
+            path = results / "bench" / f"{config.family}-{fmt}.jsonl"
+            path.unlink(missing_ok=True)
+            if tag not in ollama.installed():
+                ollama.pull(tag)
+            bench(tag, bench_items, path)
             ollama.unload(tag)
             if tag not in keep:
                 ollama.remove(tag)

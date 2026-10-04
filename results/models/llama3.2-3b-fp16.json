@@ -1,0 +1,18 @@
+{
+ "tag": "llama3.2:3b-instruct-fp16",
+ "digest": "195a8c01d91ec3cb1e0aad4624a51f2602c51fa7d96110f8ab5a20c84081804d",
+ "size": 6433703586,
+ "details": {
+  "parent_model": "/Users/administrator/.ollama/models/blobs/sha256-e2f46f5b501c2982b2c495a4694cb4e620aabfa2c37ebb23a90ffc8cce93854b",
+  "format": "gguf",
+  "family": "llama",
+  "families": [
+   "llama"
+  ],
+  "parameter_size": "3.2B",
+  "quantization_level": "F16",
+  "context_length": 131072,
+  "embedding_length": 3072
+ },
+ "ollama": "0.34.3"
+}
