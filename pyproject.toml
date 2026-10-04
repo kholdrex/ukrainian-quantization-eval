@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uaquant"
+version = "1.0.0"
+description = "Accuracy and speed of GGUF quantisation levels on paired Ukrainian and English questions"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Oleksandr Kholodniak" }]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy==2.2.6",
+    "pandas==2.2.3",
+    "pyarrow==19.0.1",
+    "matplotlib==3.10.3",
+    "requests==2.32.3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[project.scripts]
+uaquant = "uaquant.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
