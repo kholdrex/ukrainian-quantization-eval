@@ -49,8 +49,12 @@ Results hold for these checkpoints, this runtime and this machine; no claim abou
   from the speed medians (this happened only for Qwen2.5 Q3_K_M with Ukrainian prompts).
 - The speed of Qwen2.5 Q5_K_M was measured again on an idle machine (`uaquant rebench`), because another
   CPU-intensive job ran during the first measurement; the accuracy runs are not affected.
-- Exploratory, added after the main results: the share of changed answers grouped by the F16 probability of the
-  chosen letter (below 0.9, 0.9–0.99, at least 0.99).
+- Exploratory, added after the main results: the share of changed answers grouped by the F16 score of the chosen
+  letter (below 0.9, 0.9–0.99, at least 0.99); the score is normalised over the letters found among the 20 most likely
+  first tokens and is not a calibrated probability.
+- The mean KL divergence (item 3) is still computed in summary.json but not reported in the paper: when no letter
+  is among the 20 tokens the distribution is taken as uniform, and missing letters get probability 10^-12, so the
+  values are not divergences between fully observed distributions.
 - Corrections of the wording above, made after the runs: the pilot covered 30 question pairs (60 prompts), not
   "40 questions"; the speed test limits generation to 128 tokens rather than fixing its length; the Holm family has
   12 contrasts.

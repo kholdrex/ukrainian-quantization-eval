@@ -143,8 +143,9 @@ def run(configs: list[Config], items: list[Item], bench_items: list[Item], resul
 
 
 def rebench(configs: list[Config], bench_items: list[Item], results: Path, keep: set[str]) -> None:
-    """Measure speed and memory again, e.g. when another job competed for the machine during the first run; the
-    earlier measurement is kept next to the new one with the suffix `.superseded`."""
+    """Measure speed and memory again, e.g. when another job competed for the machine during the first run. The new
+    measurement is written to a temporary file; only when it is complete is the earlier one moved aside under a
+    name with the time of the replacement."""
     for config in configs:
         for fmt, tag in config.tags():
             name = f"{config.family}-{fmt}"
@@ -152,9 +153,12 @@ def rebench(configs: list[Config], bench_items: list[Item], results: Path, keep:
                 ollama.pull(tag)
             check_identity(results / "models" / f"{name}.json", tag)
             path = results / "bench" / f"{name}.jsonl"
+            fresh = path.with_suffix(".new")
+            fresh.unlink(missing_ok=True)
+            bench(tag, bench_items, fresh)
             if path.exists():
-                path.rename(path.with_suffix(".superseded"))
-            bench(tag, bench_items, path)
+                path.rename(path.with_suffix(f".superseded-{time.strftime('%Y%m%dT%H%M%S')}"))
+            fresh.rename(path)
             ollama.unload(tag)
             if tag not in keep:
                 ollama.remove(tag)
