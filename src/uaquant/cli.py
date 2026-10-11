@@ -21,8 +21,8 @@ def sample() -> list[data.Item]:
 
 
 def pilot() -> list[data.Item]:
-    items = data.load(DATA)
     used = {it.id for it in sample()}
+    items = data.load(DATA)
     return data.stratified([it for it in items if it.id not in used], PILOT_PER_CATEGORY, SEED)
 
 

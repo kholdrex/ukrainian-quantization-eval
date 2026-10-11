@@ -24,7 +24,9 @@ data/           sample.json
 results/        answers/<model>-<level>.jsonl (first-token letter log-probabilities and prompt tokens per question
                 and language), bench/<model>-<level>.jsonl (load, memory and per-prompt timings; `.superseded-<time>` is a measurement
                 replaced by `uaquant rebench`), models/ (Ollama tag,
-                digest and size of every file), pilot/, summary.json
+                digest and size of every file; `parent_model` is copied from Ollama and holds a path on the machine
+                that built the file), pilot/ (the pilot of 30 question pairs run before the plan was fixed),
+                summary.json
 figures/        figure of the paper
 tests/          unit tests
 PROTOCOL.md     analysis plan fixed before the test runs, with the changes made during them
@@ -42,7 +44,8 @@ uv run uaquant analyze               # summary.json and the figure from the stor
 uv run uaquant run test              # resumes the runs; pulls each model file, runs it and removes it again
 ```
 
-Timings depend on the machine and on other load; run the speed test on an idle machine.
+Timings depend on the machine and on other load; run the speed test on an idle machine. `uaquant run pilot` draws 8
+questions per category and appends to `results/pilot/`, so move the archived pilot aside before a new one.
 
 ## License
 
