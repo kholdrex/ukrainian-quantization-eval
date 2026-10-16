@@ -3,6 +3,8 @@
 Code, model outputs and measurements for the paper *Accuracy and speed of quantised small language models in
 Ukrainian and English* (O. Kholodniak).
 
+Archived on Zenodo: [doi:10.5281/zenodo.23408167](https://doi.org/10.5281/zenodo.23408167).
+
 Three small open models (Qwen2.5 3B Instruct, Llama 3.2 3B Instruct, Gemma 3 4B IT) answer 1800 paired English and
 Ukrainian Global-MMLU questions at the GGUF precision levels published in the Ollama library (F16, Q8_0, Q6_K, Q5_K_M,
 Q4_K_M, Q3_K_M; Gemma 3 only F16, Q8_0, Q4_K_M). The answer is the letter with the highest first-token probability.
