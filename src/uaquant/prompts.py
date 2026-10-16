@@ -1,4 +1,4 @@
-"""Prompts for answering a question with one letter and for the fixed-length generation benchmark."""
+"""Prompts for answering a question with one letter and for the generation benchmark."""
 
 from .data import LETTERS, Item
 

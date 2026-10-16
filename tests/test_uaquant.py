@@ -1,6 +1,9 @@
-import numpy as np
+import json
 
-from uaquant import analysis, prompts
+import numpy as np
+import pytest
+
+from uaquant import analysis, experiment, ollama, prompts
 from uaquant.data import Item
 
 ITEM = Item(
@@ -43,10 +46,6 @@ def test_holm_is_monotone():
 
 
 def test_a_resumed_run_refuses_a_different_model_file(tmp_path, monkeypatch):
-    import pytest
-
-    from uaquant import experiment, ollama
-
     files = {"m:q4": {"digest": "a", "size": 1, "details": {}}}
     monkeypatch.setattr(ollama, "installed", lambda: files)
     monkeypatch.setattr(ollama, "version", lambda: "0.34.3")
@@ -59,10 +58,6 @@ def test_a_resumed_run_refuses_a_different_model_file(tmp_path, monkeypatch):
 
 
 def test_aborted_generations_are_recorded_separately(tmp_path, monkeypatch):
-    import json
-
-    from uaquant import experiment, ollama
-
     def fake_stream(tag, messages, tokens):
         if "Два" in messages[-1]["content"]:
             return {"error": "prediction aborted", "ttft": None, "wall": 1.0, "attempts": 1}

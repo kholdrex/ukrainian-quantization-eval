@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this software or data, please cite it as below. Global-MMLU keeps its own licence (THIRD_PARTY_NOTICES.md)."
+message: "If you use this software or data, please cite it as below. Global-MMLU and the models keep their own licences (THIRD_PARTY_NOTICES.md)."
 title: "GGUF quantisation of small language models on paired Ukrainian and English questions: code and measurements"
 authors:
   - family-names: Kholodniak
@@ -7,6 +7,8 @@ authors:
     orcid: "https://orcid.org/0009-0000-1012-7361"
     affiliation: "National Aerospace University \"Kharkiv Aviation Institute\""
 version: 1.0.0
-date-released: 2026-10-04
-license: MIT
+date-released: 2026-10-16
+license:
+  - MIT
+  - CC-BY-4.0
 repository-code: "https://github.com/kholdrex/ukrainian-quantization-eval"

@@ -30,7 +30,8 @@ wrong.
 1. Accuracy for every model × format × language with 95% bootstrap intervals over questions (10000 resamples).
 2. Primary: for each model and quantised format q, the language difference of the accuracy change relative to F16,
    D_q = (A_uk,q − A_uk,F16) − (A_en,q − A_en,F16), with a paired bootstrap interval over questions (both languages
-   of a question resampled together) and a two-sided bootstrap p-value; Holm correction over the 12 contrasts (the text first said 13; Gemma 3 has two quantised levels).
+   of a question resampled together) and a two-sided bootstrap p-value; Holm correction over the 12 contrasts (the
+   text first said 13; Gemma 3 has two quantised levels).
 3. Answer changes against F16 per language: share of questions whose answer differs, correct→wrong and wrong→correct
    counts; mean KL divergence between the F16 and quantised letter distributions.
 4. Speed and memory per format on an Apple M1 Pro (16 GB): model load time, memory reported by Ollama, time to first
@@ -55,6 +56,12 @@ Results hold for these checkpoints, this runtime and this machine; no claim abou
 - The mean KL divergence (item 3) is still computed in summary.json but not reported in the paper: when no letter
   is among the 20 tokens the distribution is taken as uniform, and missing letters get probability 10^-12, so the
   values are not divergences between fully observed distributions.
+- Added to the runner during the runs: a generation whose stream breaks off (a connection error or no final chunk)
+  is sent again, up to three attempts in all. The number of attempts (`attempts`) has been recorded only since the
+  measurements were completed, so the stored speed measurements do not show whether any prompt was sent twice. An
+  error reported by Ollama (an aborted generation) is never repeated.
+- The results by subject category (item 5) are computed in summary.json (`by_category`) but not reported in the
+  paper.
 - Corrections of the wording above, made after the runs: the pilot covered 30 question pairs (60 prompts), not
   "40 questions"; the speed test limits generation to 128 tokens rather than fixing its length; the Holm family has
   12 contrasts.

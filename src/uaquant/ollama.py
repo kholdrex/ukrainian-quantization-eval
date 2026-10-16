@@ -25,8 +25,8 @@ def answer(model: str, messages: list[dict], top: int = 20) -> dict:
 
 
 def stream(model: str, messages: list[dict], tokens: int, attempts: int = 3) -> dict:
-    """Generate a fixed number of tokens, recording the wall-clock time to the first token; a stream that breaks
-    off is repeated."""
+    """Generate up to `tokens` tokens, recording the wall-clock time to the first token; a stream that breaks off
+    is repeated."""
     for attempt in range(attempts):
         try:
             return {**stream_once(model, messages, tokens), "attempts": attempt + 1}

@@ -1,4 +1,4 @@
-"""Accuracy, language-specific accuracy change against F16, answer changes, speed and memory; tables and figures."""
+"""Accuracy, language-specific accuracy change against F16, answer changes, speed and memory; summary and figure."""
 
 import json
 from pathlib import Path
@@ -59,7 +59,7 @@ def accuracy_tables(items: list[Item], results: Path) -> tuple[dict, dict]:
             entry = {}
             for lang in LANGS:
                 v = correct[(fmt, lang)]
-                failures = np.mean([rows[fmt][(it.id, lang)]["token"].strip() not in LETTERS for it in items])
+                failures = np.mean([rows[fmt][(it.id, lang)]["token"].strip() not in set(LETTERS) for it in items])
                 entry[lang] = {
                     "accuracy": float(v.mean()),
                     "ci": interval(v[boots].mean(axis=1)),
